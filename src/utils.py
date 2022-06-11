@@ -3,6 +3,8 @@ import os
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.colors import ListedColormap, BoundaryNorm
+from sklearn.model_selection import train_test_split
+from imblearn.under_sampling import RandomUnderSampler
 
 WIDTH, HEIGHT = 300, 300
 TIME, FEATURES = 12, 15
@@ -26,6 +28,12 @@ category_norm = BoundaryNorm([x - 0.5 for x in range(len(colors) + 1)], category
 GOZD = 2
 POZIDANO = 8
 SNEGLED = 10
+
+def reduce_and_undersample(X, y, size):
+    X, _, y, _ = train_test_split(X, y, test_size=size, stratify=y)
+    r = RandomUnderSampler()
+    X, y = r.fit_resample(X, y)
+    return X,y
 
 def get_reference(N:int):
     '''Vrne tabelo referenc polja N'''
@@ -60,6 +68,8 @@ def get_data(N: int, reference=False):
     return array
 # Datoteke vsebujejo 90.000 vrstic in 180 (data.npy) ali 1 (reference.npy) stolpec.
 # Za grafični prikaz je lažje, če obliko spremenimo v 300x300, pri podatkih pa še 180 stolpcev pretvorimo v 12x15
+def array_4D(array):
+    return array.reshape(height, width, time, features)
 def data_to_4D(array, height=HEIGHT, width=WIDTH, time=TIME, features=FEATURES):
     '''Pretvori 2D podatke v 4D prikaz. Indeksi so:
         1. vrstica (300)

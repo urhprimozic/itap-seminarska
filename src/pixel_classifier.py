@@ -1,4 +1,3 @@
-from unittest import result
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
@@ -48,10 +47,10 @@ def pixel_classifier(X_train, y_train, grid, model, grid_search=True, undersampl
         #X_train, _, y_train, _ = train_test_split(X_train, y_train, train_size=undersampling*15, stratify=y_train)
         if model == SVC:
             X_train, _, y_train, _ = train_test_split(
-                X_train, y_train, train_size=0.01, stratify=y_train)
+                X_train, y_train, train_size=min(0.01, undersampling), stratify=y_train)
         if model == RandomForestClassifier or model == KNeighborsClassifier:
             X_train, _, y_train, _ = train_test_split(
-                X_train, y_train, train_size=0.01, stratify=y_train)
+                X_train, y_train, train_size=min(0.01, undersampling), stratify=y_train)
         X_res, y_res = rus.fit_resample(X_train, y_train)
         params = grid.best_params_
         # naredimo novo drevo s starimi parametri
@@ -132,7 +131,7 @@ if __name__ == "__main__":
     X_test_avr_spring = np.concatenate(
         [average_data(get_data(i), [i for i in range(12)]) for i in test])
 
-    
+        
 
     models = {
         #'svc': GridSearchCV(SVC(), param_grid={'C': [2, 4, 6, 8], 'kernel': ['poly', 'rbf', ], 'degree': [5], 'probability': [True]}, scoring='accuracy'),
