@@ -23,6 +23,9 @@ colors = {
 }
 category_cmap = ListedColormap(list(colors.values()), name="category_cmap")
 category_norm = BoundaryNorm([x - 0.5 for x in range(len(colors) + 1)], category_cmap.N)
+GOZD = 2
+POZIDANO = 8
+SNEGLED = 10
 
 def get_reference(N:int):
     '''Vrne tabelo referenc polja N'''
@@ -31,6 +34,22 @@ def get_reference(N:int):
     with open(os.path.join(INPUT_FOLDER, f'reference_{N}.npy'), 'rb') as filehandle:
         array = np.load(filehandle)
     return array
+
+def reference_forest(reference):
+    '''
+    Spremeni vse, kar ni gozd(2) v 0 (no data)
+    '''
+    reference[reference != GOZD] = 0
+    return reference
+
+def reference_buildings(reference):
+    '''
+    Spremeni vse, kar ni pozidano(2) v 0 (no data)
+    '''
+    reference[reference != POZIDANO] = 0
+    return reference
+
+
 def get_data(N: int, reference=False):
     '''Vrne tabelo oblike 90.000 x 180, ki predstavlja polje številka N. Če je reference=True, vrne reference
     '''
@@ -74,6 +93,7 @@ def plot_reference(N : int):
     plt.figure(figsize=(8, 8))
     plt.imshow(reshape_reference(get_reference(N)), cmap=category_cmap, norm=category_norm)
     plt.show()
+
 
 def plot_data(N : int, mesec, kanali=[3, 2, 1], lighting=3.5, reference=False):
     '''Izriše poljše številka N v c določenem mesecu. 
