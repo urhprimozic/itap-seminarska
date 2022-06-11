@@ -10,7 +10,11 @@ import numpy as np
 import matplotlib.pyplot as plt
 from pixel_classifier import pixel_classifier
 import pickle
+import reliefe
 
-#
+# EDINA delujoča implementacija Reliefa za python!!!! IJS STRONG!
+
+
+
 if __name__ == "__main__":
     pass
